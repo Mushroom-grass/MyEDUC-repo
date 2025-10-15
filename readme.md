@@ -10,16 +10,29 @@
 # Git Commands:
 - git clone
 - git status: 
-- add: track your files and changes in Git
+- git add: track your files and changes in Git
 eg: git add .  (which means upload all changes)
 eg: git add index.html  (upload one specific file)
 - commit: save your files in Git
 eg: git commit -m “message about change” -m “some descriptions”
-- push: upload git commits to a remote repo, like GitHub
-- pull: download changes from remote repo to your local machine, the opposite of push
+- git push -v: upload git commits to a remote repo, like GitHub
+- pull/git fetch -v: download changes from remote repo to your local machine, the opposite of push
 
 # Folder Commands
 - la (mac) / ls -la: list everything including  hidden files and folders.
 
 For windows: Git Bash is better
 For MacOS: Git has been installed
+
+# ssh keys:
+connect your local repo to your GitHub account.
+
+- ssh-keygen -t rsa -b 4096 -c “email@address.com”(GitHub account): generate a ssh key
+
+eg: ssh-keygen -t rsa -C “Yuanqi-hu@outlook.com”
+//执行后一直回车即可
+
+- ls | grep testkey(file name): list all ssh keys
+- testkey.pub: you can share it with others
+- testkey: your private key
+- ssh -T git@github.com: test connection of ssh
