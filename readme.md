@@ -14,7 +14,7 @@
 eg: git add .  (which means upload all changes)
 eg: git add index.html  (upload one specific file)
 - commit: save your files in Git
-eg: git commit -m “message about change” -m “some descriptions”
+eg: git commit -m ‘message about change’ -m ‘some descriptions’
 - git push -v: upload git commits to a remote repo, like GitHub
 - pull/git fetch -v: download changes from remote repo to your local machine, the opposite of push
 
