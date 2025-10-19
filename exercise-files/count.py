@@ -1,4 +1,4 @@
-with open("test.txt", "r") as f:
+with open("romeo-full.txt", "r") as f:
     data = f.readlines()
 
     total_lines = 0
@@ -17,5 +17,4 @@ with open("test.txt", "r") as f:
 with open("output.txt","w") as f:
     f.write("Total lines:" + str(total_lines) + "\n")
     f.write("Juliet:" + str(juliet_count) + "\n")
-    f.write("Romeo:" + str(romeo_count)) 
-    
+    f.write("Romeo:" + str(romeo_count))    
