@@ -1,3 +1,7 @@
+For windows: Git Bash is better
+
+For MacOS: Git has been installed
+
 # Terms:
 - Directory: Folder
 - Terminal or Command Line: Interface for Text Commands
@@ -21,8 +25,6 @@ eg: git commit -m ‘message about change’ -m ‘some descriptions’
 # Folder Commands
 - la (mac) / ls -la: list everything including  hidden files and folders.
 
-For windows: Git Bash is better
-For MacOS: Git has been installed
 
 # ssh keys:
 connect your local repo to your GitHub account.
