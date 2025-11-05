@@ -38,3 +38,8 @@ eg: ssh-keygen -t rsa -C “Yuanqi-hu@outlook.com”
 - testkey.pub: you can share it with others
 - testkey: your private key
 - ssh -T git@github.com: test connection of ssh
+
+Open the terminal application, and run the executable within the app bundle, with commands like this:
+
+    cd /Applications/Blender.app/Contents/MacOS
+    ./Blender

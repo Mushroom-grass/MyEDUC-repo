@@ -1,0 +1,10 @@
+,object,type,material,material number
+0,BézierCurve,CURVE,None,None
+1,Camera,CAMERA,None,None
+2,Cone,MESH,None,None
+3,Cube,MESH,"Material.001,",1
+4,Cylinder,MESH,"Material.003,Material,",2
+5,Light,LIGHT,None,None
+6,Mball,META,None,None
+7,NurbsCircle,CURVE,None,None
+8,Torus,MESH,"Material.002,",1
