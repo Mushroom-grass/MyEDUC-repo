@@ -1,6 +1,0 @@
-import bpy
-
-scene = scene or bpy.context.scene
-for obj in scene.objects:
-    if obj.type == 'MESH':
-        print(obj.name)
