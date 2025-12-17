@@ -1,0 +1,11 @@
+object,type,material,material number,texture
+BézierCurve,CURVE,None,None,None
+Camera,CAMERA,None,None,None
+Cone,MESH,None,None,None
+Cube,MESH,Material.001,1,texture1.jpg
+Cylinder,MESH,"Material,Material.003",2,"texture2.jpg,texture_n.jpg,t1"
+Light,LIGHT,None,None,None
+Mball,META,None,None,None
+NurbsCircle,CURVE,None,None,None
+Sphere,MESH,Material.004,1,None
+Torus,MESH,Material.002,1,None

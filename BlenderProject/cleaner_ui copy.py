@@ -1,5 +1,5 @@
 # 导入Blender的Python API模块
-import bpy, csv
+import bpy, csv, os
 import pandas as pd
 
 
@@ -32,22 +32,44 @@ class MTtoCSV(bpy.types.Operator):
             if len(obj.material_slots) == 0:
                 Material.append('None')
                 MatSum.append('None')
+                MatT.append('None')
             else:
                 # 依次写入对象的材质数量
                 MatSum.append(len(obj.material_slots))
                 s_m = ''
+                s_t = ''
                 # 读取一个对象的每个材质
                 for slot in obj.material_slots:
                     if slot.material != None:
-                        s_m = slot.material.name + ',' + s_m
-                        MatT.append(slot.material.name)
+                        s_m += slot.material.name + ','
+                        mat = slot.material
+                        # 确保开启材质节点，才能读取对应贴图
+                        if not mat.use_nodes:
+                            mat.use_nodes = True
+                        nodes = mat.node_tree.nodes
+                        links = mat.node_tree.links
+                        
+                        image_nodes = [n for n in nodes if n.type == 'TEX_IMAGE']
+                        if image_nodes:
+                            for n in image_nodes:
+                            # if n.image:
+                                # print("Node:", n.name, "Image:", n.image.name, "Path:", n.image.filepath)
+                                s_t += n.image.name + ','
+                        else: s_t = 'None'
+                    else: s_m = 'None'
                 # 将所有材质写入，并清理尾部逗号
                 Material.append(s_m.rstrip(','))
+                MatT.append(s_t.rstrip(','))
 
-        dict = {'object': Object, 'type': Type, 'material': Material, 'material number': MatSum}
+        dict = {'object': Object, 'type': Type, 'material': Material, 'material number': MatSum, 'texture': MatT}
         df = pd.DataFrame(dict)
         # save to csv
-        df.to_csv('/Users/yuanqihu/Library/CloudStorage/OneDrive-PennO365/2025Fall/EDUC5913/MyEDUC-repo/BlenderProject/secene_content.csv')
+        # 自动读取文件所在文件夹，并保存下来
+        blend_path = bpy.data.filepath          # 当前 .blend 的完整路径
+        blend_dir  = os.path.dirname(blend_path)  # 所在文件夹
+        csv_path = os.path.join(blend_dir, "scene_content.csv")
+#        print(csv_path)
+        df.to_csv(csv_path, index=False, encoding="utf-8")
         
         return {"FINISHED"}
 
@@ -63,16 +85,41 @@ class MTclean(bpy.types.Operator):
         return len(bpy.data.materials) > 0
 
     def execute(self, context):
-        deleted_count = 0
+        # -------- 清理未使用的材质 -------- 
+        deleted_mat_count = 0
         for mat in bpy.data.materials:
             # 判断材质的用户数量（即被对象使用的次数），如果 mat.users == 0，则该材质未被任何对象使用
             if mat.users == 0:
                 # 删除该材质，do_unlink=True 会尝试解除所有链接。
                 bpy.data.materials.remove(mat, do_unlink=True)
-                deleted_count += 1
+                deleted_mat_count += 1
+
+        # -------- 清理未使用的贴图 -------- 
+        used_images = set()
+        # 先找到所有使用的贴图
+        for mat in bpy.data.materials:
+            if not mat.use_nodes or not mat.node_tree:
+                continue
+
+            for node in mat.node_tree.nodes:
+                if node.type in {'TEX_IMAGE', 'TEX_ENVIRONMENT'}:
+                    img = getattr(node, "image", None)
+                    if img is not None:
+                        used_images.add(img)
+
+        # 再遍历所有的贴图，并删除未被使用的
+        deleted_img_count = 0
+        for img in list(bpy.data.images):
+            if img not in used_images:
+                bpy.data.images.remove(img)
+                deleted_img_count += 1
+
 
         # 在 Blender 界面左下角显示结果
-        self.report({'INFO'}, f"清理完成。共删除 {deleted_count} 个未使用的材质。")
+        self.report(
+            {'INFO'}, 
+            f"清理完成。共删除 {deleted_mat_count} 个未使用材质，"
+            f"{deleted_img_count} 个未使用贴图。")
         return {"FINISHED"}
 
 
@@ -121,3 +168,7 @@ def unregister():
 # 这部分代码确保如果脚本直接执行，面板会被注册
 if __name__ == "__main__":
     register()
+
+
+# References:
+# https://blog.csdn.net/weixin_41767230/article/details/116234927
